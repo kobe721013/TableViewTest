@@ -13,6 +13,8 @@ class MyTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //UINavigationBar.appearance().bar
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -32,20 +34,52 @@ class MyTableViewController: UITableViewController {
         return 1
     }
 
+    
+    
+    //var imageSets = [UIImage]()
+    var imageSets = [UIImage?](repeating: nil, count: 10)
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        
+        
+        return 10
     }
 
     
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath) as! MyTableViewCell
+        
+        let cellType = indexPath.row % 2
+    
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell\(cellType)", for: indexPath) as! MyTableViewCell
+        
+        if let image = imageSets[indexPath.row]
+        {
+            print("row=\(indexPath.row) alrady existed.")
+            
+            cell.myImageView.image = image//UIImage(data: data as! Data)
+            if(cellType == 0){
+                
+                cell.myImageVIew2.image = image
+            }
+        }
+        else{
+            
+             print("row=\(indexPath.row) not existed. downloaded it.")
+            let url = URL(string: "http://az616578.vo.msecnd.net/files/2016/05/02/635977562108560005-679443365_kobe.jpg")
+            let data = NSData(contentsOf: url!)
+        
+            let img = UIImage(data: data as! Data)
 
-        let url = URL(string: "http://az616578.vo.msecnd.net/files/2016/05/02/635977562108560005-679443365_kobe.jpg")
-        let data = NSData(contentsOf: url!)
-        
-        
-        cell.myImageView.image = UIImage(data: data as! Data)
+            
+            imageSets.insert(img, at: indexPath.row)
+            cell.myImageView.image = img//UIImage(data: data as! Data)
+            
+            if cellType==0{
+                cell.myImageVIew2.image = img
+            }
+        }
         
         // Configure the cell...
 
